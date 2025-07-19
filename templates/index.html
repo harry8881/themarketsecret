@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Market Secret</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(to bottom, #8B0000, #000000);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        .caption {
+            font-size: 14px;
+            color: #ffcccc;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            margin: 0.75rem auto;
+            padding: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            transition: 0.3s ease;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The Market Secret</h1>
+        <p class="caption">Discipline Over Emotion. Trade the Plan, Not the Impulse.</p>
+        <a href="{{ url_for('login') }}" class="btn">Login</a>
+        <a href="{{ url_for('signup') }}" class="btn">Create Account</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | MasterMind Trading Blueprint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome, {{ current_user.email }} 👋</h1>
+
+        <div class="package-grid">
+            <div class="package-card">
+                <h3>$10K Instant Fund</h3>
+                <p>One-time fee: $119</p>
+                <a href="#" class="btn-package">Select Package</a>
+            </div>
+
+            <div class="package-card">
+                <h3>$25K Instant Fund</h3>
+                <p>One-time fee: $250</p>
+                <a href="#" class="btn-package">Select Package</a>
+            </div>
+
+            <!-- Add more packages here if needed -->
+        </div>
+    </div>
+</body>
+</html>

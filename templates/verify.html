@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>   
+    <link rel="icon" href="/static/images/favicon.ico">
+    <title>Verify Email - The Market Secret</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <div class="logo">The Market Secret</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('course') }}">Course</a>
+            <a href="{{ url_for('mentorship') }}">1-1 Mentorship</a>
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+            <a href="{{ url_for('signup') }}" class="signup-btn">Signup</a>
+            <a href="https://discord.gg/vXmcKXkRYP" class="discord-btn">Join Discord</a>
+        </div>  
+    </div>
+    <div class="form-container">
+        <div class="form-box">
+            <h1>Verify Your Email</h1>
+            <p>Please enter the 6-digit code sent to {{ email }}</p>
+            {% if error %}
+                <p style="color: #FF4500;">{{ error }}</p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('verify', email=email) }}">
+                {{ form.hidden_tag() }}
+                <div>
+                    {{ form.code.label }}<br>
+                    {{ form.code(placeholder="Enter 6-digit code") }}
+                </div>
+                <div>
+                    {{ form.submit() }}
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

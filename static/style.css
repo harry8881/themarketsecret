@@ -1,0 +1,144 @@
+/* Global background solid color */
+body.gradient {
+    /* Replace gradient with solid color #1e2225 */
+    background: #1e2225; /* Changed from gradient */
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Navbar/Header section */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #1e2225; /* Changed from #111 */
+    color: white;
+    display: flex;
+    justify-content: space-between; /* Left logo, right buttons */
+    align-items: center;
+    padding: 1rem 2rem;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.menu {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Center box (Login/Register Box) */
+.center-box {
+    text-align: left;
+    background-color: rgba(30, 34, 37, 0.8); /* Changed from rgba(0,0,0,0.6) to match #1e2225 with opacity */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(30, 34, 37, 0.9); /* Shadow color adjusted */
+    width: 90%;
+    max-width: 400px;
+    margin: 120px auto; /* adds spacing below fixed navbar */
+}
+
+/* Headings inside center-box */
+h1, h2 {
+    font-size: 32px;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.caption {
+    font-size: 14px;
+    color: #ffcccc;
+    margin-bottom: 2rem;
+    font-style: italic;
+    text-align: center;
+}
+
+/* Buttons and links */
+a.button, input[type="submit"], .btn-submit {
+    display: inline-block;
+    background-color: #ff4444;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin: 1rem 0.5rem 0 0;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+    text-align: center;
+}
+
+a.button:hover, input[type="submit"]:hover, .btn-submit:hover {
+    background-color: #cc0000;
+}
+
+/* Form groups */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+/* Input styling */
+.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* Flash messages */
+.flash {
+    background-color: #cc0000;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Paragraph links for register text */
+.register-text {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.register-text a {
+    color: #ff4444;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-text a:hover {
+    color: #cc0000;
+}
+
+/* Responsive: make sure navbar and center-box adjust on mobile */
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+    .menu {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+    .center-box {
+        margin-top: 140px;
+        padding: 1.5rem;
+    }
+}

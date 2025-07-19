@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | MasterMind Trading Blueprint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="gradient">
+    <div class="center-box">
+        <h2>Sign in to your account</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(class_="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class_="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class_="btn-submit") }}
+            </div>
+        </form>
+
+        <p class="register-text">
+            Don't have an account? <a href="{{ url_for('signup') }}" class="button">Create your account</a>
+        </p>
+    </div>
+</body>
+</html>

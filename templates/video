@@ -1,0 +1,4 @@
+video_urls = {
+    'smc': 'https://vimeo.com/your_smc_video_id',
+    'wave_smc': 'https://vimeo.com/your_wave_smc_video_id'
+}

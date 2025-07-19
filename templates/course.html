@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course | The Market Secret</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #1e2225; /* changed here */
+            min-height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            justify-content: flex-start;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #1e2225; /* changed here */
+            padding: 10px;
+            text-align: center;
+            z-index: 1000;
+        }
+        .nav-buttons a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 5px 10px;
+        }
+        .nav-buttons a.active {
+            background-color: #4752C4;
+        }
+        .nav-buttons a:hover {
+            background-color: #3C5F5F;
+        }
+        .course-container {
+            padding-top: 80px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center horizontally */
+            gap: 20px;
+        }
+        .course-box {
+            padding: 20px;
+            border: 2px solid #FF4500;
+            border-radius: 10px;
+            width: 320px;
+            text-align: left;
+            background-color: #1e2225; /* changed here */
+        }
+        .course-box h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .progress-item {
+            margin: 5px 0;
+        }
+        .flash-message {
+            color: white;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .packages {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            gap: 30px;
+            flex-wrap: nowrap; /* Keep side by side */
+            width: 100%;
+        }
+        .package-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .package-list li {
+            margin: 8px 0;
+        }
+        .package-price {
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        /* Button styles for price buttons */
+        .price-button {
+            display: block;
+            margin: 15px auto 0 auto;
+            padding: 10px 20px;
+            background-color: #FF4500;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .price-button:hover {
+            background-color: #e03e00;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav-buttons">
+            <a href="{{ url_for('dashboard') }}" class="button">Home</a>
+            <a href="{{ url_for('course') }}" class="active">Course Package</a>
+            <!-- 1-1 Mentorship button removed -->
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+
+    <div class="course-container">
+        {% if video_url %}
+            <div class="course-box">
+                <h2>Video</h2>
+                <iframe src="{{ video_url }}" width="300" height="169" frameborder="0" allowfullscreen></iframe>
+            </div>
+        {% endif %}
+
+        <div class="course-box">
+            <h2>The Market Secret</h2>
+            {% if progress %}
+                {% for lesson in progress %}
+                    <div class="progress-item">✅ {{ lesson }}</div>
+                {% endfor %}
+            {% else %}
+            {% endif %}
+        </div>
+
+        <!-- Packages section -->
+        <div class="packages">
+            <div class="course-box">
+                <h2>SMC Package</h2>
+                <ul class="package-list">
+                    <li>✅ SMC Basic</li>
+                    <li>✅ SMC Advanced</li>
+                    <li>✅ SMC Trade Plan</li>
+                    <li>✅ Video Course</li>
+                    <li>❌ Zoom</li>
+                    <li>✅ Discord Community</li>
+                </ul>
+
+                <div class="package-price">Fees - 120$ 💰</div>
+                <a href="#" class="price-button">Buy SMC Package</a>
+            </div>
+
+            <div class="course-box">
+                <h2>Wave + SMC Package</h2>
+                <ul class="package-list">
+                    <li>✅ Elliott Wave Basic + SMC</li>
+                    <li>✅ Elliott Wave Advanced + SMC</li>
+                    <li>✅ Elliott Wave Trade Plan + SMC</li>
+                    <li>✅ Video Course</li>
+                    <li>✅ Zoom</li>
+                    <li>✅ Discord Community</li>
+                    <li>✅ Lifetime Membership</li>
+                </ul>
+                <div class="package-price">Fees - 250$ 💰</div>
+                <a href="#" class="price-button">Buy Wave + SMC Package</a>
+            </div>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-message">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>

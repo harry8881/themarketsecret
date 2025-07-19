@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Market News</title>
+  <style>
+    body {
+      margin: 0;
+      background: #1e2225;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #1e2225;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 20;
+      border-bottom: 1px solid #333;
+    }
+
+    .navigation {
+      width: 200px;
+      background: #1e2225;
+      padding: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: fixed;
+      top: 80px;
+      height: calc(100vh - 80px);
+      z-index: 10;
+      justify-content: space-between;
+    }
+
+    .nav-buttons {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .navigation .btn {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 1rem;
+      justify-content: flex-start;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .navigation .btn span.text {
+      margin-left: 1rem;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      color: white;
+    }
+
+    .navigation .btn:hover {
+      background-color: rgba(255, 68, 68, 0.3);
+      transform: translateX(5px);
+    }
+
+    .navigation .btn:hover span.text {
+      opacity: 1;
+    }
+
+    .content {
+      margin-left: 200px;
+      margin-top: 120px;
+      padding: 2rem;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .news-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .news-item {
+      background-color: #2a2d32;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .news-item h3 {
+      color: #ff4500;
+      font-size: 1.4rem;
+      margin: 0 0 0.5rem;
+    }
+
+    .news-item p {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin: 0.5rem 0;
+    }
+
+    .news-item a {
+      color: #ffd700;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .news-item a:hover {
+      text-decoration: underline;
+    }
+
+    .news-item .date {
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    .flash-message {
+      color: #ff4500;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 0;
+        margin-top: 100px;
+        padding: 1rem;
+      }
+
+      .navigation {
+        width: 100%;
+        height: auto;
+        top: 60px;
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.5rem 0;
+      }
+
+      .nav-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .navigation .btn {
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .navigation .btn span.text {
+        display: none;
+      }
+
+      .news-container {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span style="color: red; font-size: 1.5rem; font-weight: bold;">The Market Secret</span>
+  </div>
+
+  <div class="navigation">
+    <div class="nav-buttons">
+      <a href="{{ url_for('video') }}" class="btn">▶️ <span class="text">Video Course</span></a>
+      <a href="{{ url_for('mentorship') }}" class="btn">📰 <span class="text">Market News</span></a>
+      <a href="{{ url_for('competition') }}" class="btn">🏆 <span class="text">Competition</span></a>
+      <a href="{{ url_for('profile') }}" class="btn">👤 <span class="text">Profile</span></a>
+      <a href="{{ url_for('settings') }}" class="btn">⚙️ <span class="text">Settings</span></a>
+      <a href="{{ url_for('logout') }}" class="btn">↩️ <span class="text">Logout</span></a>
+    </div>
+  </div>
+
+  <div class="content">
+    <h2 style="color: #ff4500;">Market News</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <p class="flash-message">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="news-container">
+      {% if articles %}
+        {% for article in articles %}
+          <div class="news-item">
+            <h3>{{ article.title }}</h3>
+            <p class="date">{{ article.publishedAt }}</p>
+            <p>{{ article.description or 'No description available.' }}</p>
+            <a href="{{ article.url }}" target="_blank">Read more</a>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No news articles available at this time.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

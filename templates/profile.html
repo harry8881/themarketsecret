@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile - Dashboard</title>
+  <style>
+    /* Keep all your existing styles */
+    /* Add these new styles for the profile page */
+    
+    .profile-container {
+      max-width: 600px;
+      margin: 4rem auto 2rem; /* Added more top margin to move the box down */
+      background: #1e2225; /* Changed to match your dashboard background */
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border: 1px solid #333; /* Added border to distinguish from background */
+    }
+    
+    .profile-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #ff4500;
+    }
+    
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: bold;
+      color: #ffd700;
+    }
+    
+    .form-control {
+      padding: 0.75rem;
+      background: #2a2d32; /* Darker background for input fields */
+      border: 1px solid #333;
+      border-radius: 5px;
+      color: white;
+      font-size: 1rem;
+    }
+    
+    .form-control:disabled {
+      background: #333;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: #ff4500;
+      box-shadow: 0 0 0 2px rgba(255, 69, 0, 0.2); /* Added focus effect */
+    }
+    
+    .save-btn {
+      background-color: #ff4500;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .save-btn:hover {
+      background-color: #ff6500;
+    }
+    
+    .error-message {
+      color: #ff4444;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    
+    .success-message {
+      color: #44ff44;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span style="color: red; font-size: 1.5rem; font-weight: bold;">The Market Secret</span>
+  </div>
+
+  <div class="navigation">
+    <div class="nav-buttons">
+      <a href="{{ url_for('video') }}" class="btn">▶️ <span class="text">Video Course</span></a>
+      <a href="{{ url_for('mentorship') }}" class="btn">📰 <span class="text">Market News</span></a>
+      <a href="{{ url_for('competition') }}" class="btn">🏆 <span class="text">Competition</span></a>
+      <a href="{{ url_for('profile') }}" class="btn">👤 <span class="text">Profile</span></a>
+      <a href="{{ url_for('settings') }}" class="btn">⚙️ <span class="text">Settings</span></a>
+      <a href="{{ url_for('logout') }}" class="btn">↩️ <span class="text">Logout</span></a>
+    </div>
+  </div>
+
+  <div class="content" style="background-color: #1e2225;"> <!-- Added background color -->
+    <div class="profile-container">
+      <h1 class="profile-header">Your Profile</h1>
+      
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="{{ category }}-message">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      
+      <form class="profile-form" method="POST" action="{{ url_for('profile') }}">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" class="form-control" value="{{ current_user.name }}" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" class="form-control" value="{{ current_user.phone }}" required>
+          <div class="error-message" id="phone-error"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" value="{{ current_user.email }}" disabled>
+        </div>
+        
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input type="text" id="country" name="country" class="form-control" value="{{ current_user.country }}" disabled>
+        </div>
+        
+        <button type="submit" class="save-btn">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Client-side validation for phone number
+    document.getElementById('phone').addEventListener('input', function() {
+      const phone = this.value;
+      const errorElement = document.getElementById('phone-error');
+      
+      // Simple phone validation (adjust as needed)
+      const phoneRegex = /^[0-9]{10,15}$/;
+      
+      if (!phoneRegex.test(phone)) {
+        errorElement.textContent = 'Please enter a valid phone number (10-15 digits)';
+      } else {
+        errorElement.textContent = '';
+      }
+    });
+    
+    // Form submission validation
+    document.querySelector('.profile-form').addEventListener('submit', function(e) {
+      const phone = document.getElementById('phone').value;
+      const phoneRegex = /^[0-9]{10,15}$/;
+      
+      if (!phoneRegex.test(phone)) {
+        e.preventDefault();
+        document.getElementById('phone-error').textContent = 'Please enter a valid phone number before submitting';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #8B0000; /* Dark red background; match this with your design */
+    color: white;
+}
+
+.header {
+    background-color: #2F4F4F; /* Dark slate gray for navigation */
+    padding: 10px;
+    text-align: center;
+}
+
+.nav-buttons a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 5px 10px;
+}
+
+.nav-buttons a:hover {
+    background-color: #3C5F5F; /* Slightly lighter on hover */
+}
+
+.hero {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    text-align: left;
+}
+
+.hero h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 1.2em;
+    color: #D3D3D3; /* Light gray for subtitle */
+}
+
+.cta-container {
+    margin-top: 20px;
+}
+
+.cta-button {
+    background-color: #FF4500; /* Orange-red */
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 0 10px;
+    display: inline-block;
+}
+
+.cta-button.secondary {
+    background-color: #666; /* Gray for secondary button */
+}
+
+.cta-button:hover {
+    background-color: #E03A00; /* Darker orange on hover */
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.stat-item {
+    margin: 0 20px;
+}
+
+.stat-item h3 {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.stat-item p {
+    font-size: 0.9em;
+    margin: 5px 0 0;
+}
+
+.discord-btn {
+    background-color: #5865F2; /* Discord blue */
+}
+
+.discord-btn:hover {
+    background-color: #4752C4; /* Darker Discord blue on hover */
+}

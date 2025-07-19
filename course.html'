@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course | The Market Secret</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" href="/static/images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #000000;
+            color: white;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #000000;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-buttons a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            background-color: #000000;
+        }
+
+        .nav-buttons a:hover {
+            background-color: #333333;
+        }
+
+        .nav-buttons a.active {
+            background-color: #5865F2;
+        }
+
+        .header {
+            background-color: #000000;
+            padding: 15px 20px;
+            width: calc(100% - 250px);
+            margin-left: 250px;
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-buttons a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: #5865F2;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .header-buttons a:hover {
+            background-color: #333333;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            margin-top: 80px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        .course-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .course-box {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .course-box h2 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .course-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+            text-align: left;
+        }
+
+        .course-box ul li {
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #333333;
+            margin: 15px 0;
+        }
+
+        .price {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .buy-button {
+            background-color: #5865F2;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .buy-button:hover {
+            background-color: #333333;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">The Market Secret</div>
+        <div class="nav-buttons">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('courses') }}" class="active">Courses</a>
+            <a href="{{ url_for('mentorship') }}">Mentorship</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </div>
+    </div>
+    <div class="header">
+        <h2>Courses</h2>
+        <div class="header-buttons">
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}">Register</a>
+        </div>
+    </div>
+    <div class="main-content">
+        <div class="course-container">
+            <!-- First Course Box -->
+            <div class="course-box">
+                <h2>SMC Video Class</h2>
+                <ul>
+                    <li>Symbol SMC Advanced</li>
+                    <li>SMC Trade Plan</li>
+                    <li>Video Course</li>
+                    <li>Zoom</li>
+                    <li>Discord Community</li>
+                </ul>
+                <div class="divider"></div>
+                <div class="price">$119</div>
+                <a href="https://pay.boomfi.xyz/2zTGoaCjW4Ym7DZ20f2LJPfPXiY" class="buy-button">Buy Now</a>
+            </div>
+            <!-- Second Course Box -->
+            <div class="course-box">
+                <h2>SMC+ Wave Video Class</h2>
+                <ul>
+                    <li>Elliott Wave Basic + SMC</li>
+                    <li>Elliott Wave Advanced + SMC</li>
+                    <li>Elliott Wave Trade Plan + SMC</li>
+                    <li>Video Course</li>
+                    <li>Zoom</li>
+                    <li>Discord Community + Lifetime Membership</li>
+                </ul>
+                <div class="divider"></div>
+                <div class="price">$250</div>
+                <a href="#" class="buy-button">Buy Now</a> <!-- Replace # with actual payment link for $250 -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
