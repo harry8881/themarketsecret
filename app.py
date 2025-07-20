@@ -13,9 +13,11 @@ import hashlib
 from dotenv import load_dotenv
 import os
 from cachetools import TTLCache
+from admin.update_status import admin_bp
 
 load_dotenv()
 app = Flask(__name__)
+app.register_blueprint(admin_bp)
 app.config['SECRET_KEY'] = 'd880f4262fb92ff5e5e893b5198c9872'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
