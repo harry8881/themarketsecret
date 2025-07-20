@@ -14,7 +14,7 @@ def update_status():
     if request.method == 'GET':
         logger.debug("Received GET request to /admin/update-status")
         return jsonify({
-            "message": "This endpoint requires a POST request with JSON data: {'id': <user_id>, 'status': <new_status>}",
+            "message": "Send a POST request with JSON data: {'id': <user_id>, 'status': <new_status>}",
             "example": {"id": 1, "status": "active"}
         })
 
@@ -35,6 +35,7 @@ def update_status():
             user=os.environ.get('DB_USER'),
             password=os.environ.get('DB_PASS'),
             database=os.environ.get('DB_NAME'),
+            port=int(os.environ.get('DB_PORT', 3306)),  # Default to 3306 if DB_PORT not set
             connect_timeout=5
         )
         logger.debug("Database connection successful")
