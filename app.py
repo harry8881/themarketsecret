@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, abort, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, abort
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
@@ -12,7 +12,7 @@ import hmac
 import hashlib
 from dotenv import load_dotenv
 import os
-from cachetools import TTLCache  # Added for news caching
+from cachetools import TTLCache
 
 load_dotenv()
 app = Flask(__name__)
@@ -20,22 +20,30 @@ app.config['SECRET_KEY'] = 'd880f4262fb92ff5e5e893b5198c9872'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "connect_args": {"timeout": 30, "check_same_thread": False}
+}
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# Cache for news (TTL = 1 hour to avoid excessive API calls)
+# Cache for news (TTL = 1 hour)
 news_cache = TTLCache(maxsize=1, ttl=3600)
 
 class User(UserMixin, db.Model):
+    __tablename__ = 'users'  # 🔥 Added this line
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     paid = db.Column(db.Boolean, default=False)
-    package = db.Column(db.String(20), nullable=True)  # Store 'smc' or 'wave_smc'
+    package = db.Column(db.String(20), nullable=True)
     progress = db.Column(db.String(200), default='[]')
+    name = db.Column(db.String(80), nullable=True)  # Added for profile
+    phone = db.Column(db.String(15), nullable=True)  # Added for profile
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -51,22 +59,21 @@ class SignupForm(FlaskForm):
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
-@app.route('/landing')
+@app.route('/')
 def landing():
-    return render_template('landing.html')
-
-@app.route("/")
-def home():
-    print("Loading home page")
+    print("Loading landing page")
     try:
         return render_template('landing.html', user=current_user)
     except Exception as e:
         print(f"Error loading landing.html: {str(e)}")
         abort(500)
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     print("Loading login page")
+    if current_user.is_authenticated:
+        print("User already authenticated, redirecting to dashboard")
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -85,7 +92,7 @@ def login():
         print(f"Error loading login.html: {str(e)}")
         abort(500)
 
-@app.route("/signup", methods=['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     print("Loading signup page")
     form = SignupForm()
@@ -93,7 +100,6 @@ def signup():
         email = form.email.data
         password = form.password.data
         print(f"User entered email: {email}")
-        print(f"User entered password: {password}")
         existing_user = User.query.filter_by(username=email).first()
         if existing_user:
             print(f"Email {email} already exists")
@@ -104,7 +110,7 @@ def signup():
         new_user = User(username=email, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        print(f"User {email} signed up successfully and saved to database.")
+        print(f"User {email} signed up successfully")
         return redirect(url_for('login'))
     try:
         return render_template('signup.html', form=form)
@@ -112,27 +118,88 @@ def signup():
         print(f"Error loading signup.html: {str(e)}")
         abort(500)
 
-@app.route("/course")
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    print(f"Loading dashboard for user: {current_user.username}")
+    try:
+        return render_template('dashboard.html', user=current_user)
+    except Exception as e:
+        print(f"Error loading dashboard.html: {str(e)}")
+        abort(500)
+
+@app.route('/video')
+@login_required
+def video():
+    print("Redirecting from /video to /course")
+    return redirect(url_for('course')) 
+
+@app.route('/course')
 @login_required
 def course():
-    print("Loading course page for:", current_user.email)
+    print(f"Loading course page for: {current_user.email}")
     try:
         video_urls = {
-            'smc': 'https://vimeo.com/smc_video',  # Replace with actual SMC video URL
-            'wave_smc': 'https://vimeo.com/wave_smc_video'  # Replace with actual Wave SMC video URL
+            'smc': 'https://vimeo.com/smc_video',
+            'wave_smc': 'https://vimeo.com/wave_smc_video'
         }
         video_url = video_urls.get(current_user.package) if current_user.paid else None
         progress_list = ast.literal_eval(current_user.progress) if current_user.progress else []
-        return render_template('course.html', video_url=video_url, progress=progress_list, user=current_user, is_paid=current_user.paid, package=current_user.package)
+        return render_template('course.html', video_url=video_url, progress=progress_list, user=current_user, is_paid=current_user.paid)
     except Exception as e:
-        print(f"[ERROR] Could not load course page: {e}")
+        print(f"Error loading course.html: {str(e)}")
         flash('Something went wrong loading the course.')
         return redirect(url_for('dashboard'))
 
-@app.route("/mentorship")
+@app.route('/contact')
+def contact():
+    print("Loading contact page")
+    try:
+        return render_template('contact.html', user=current_user)
+    except Exception as e:
+        print(f"Error loading contact.html: {str(e)}")
+        abort(500)
+
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    print(f"Loading profile page for: {current_user.username}")
+    if request.method == 'POST':
+        name = request.form.get('name')
+        phone = request.form.get('phone')
+        if not phone or not phone.isdigit() or len(phone) < 10 or len(phone) > 15:
+            flash('Please enter a valid phone number (10-15 digits)', 'error')
+            return redirect(url_for('profile'))
+        current_user.name = name
+        current_user.phone = phone
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            print(f"Error updating profile: {str(e)}")
+            flash('An error occurred while updating your profile.', 'error')
+        return redirect(url_for('profile'))
+    try:
+        return render_template('profile.html', user=current_user)
+    except Exception as e:
+        print(f"Error loading profile.html: {str(e)}")
+        abort(500)
+
+@app.route('/settings')
+@login_required
+def settings():
+    print(f"Loading settings page for: {current_user.username}")
+    try:
+        return render_template('settings.html', user=current_user)
+    except Exception as e:
+        print(f"Error loading settings.html: {str(e)}")
+        abort(500)
+
+@app.route('/mentorship')
 @login_required
 def mentorship():
-    print("Loading mentorship page")
+    print("Loading mentorship page") 
     try:
         if 'forex_news' in news_cache:
             articles = news_cache['forex_news']
@@ -160,7 +227,7 @@ def mentorship():
         flash('An error occurred while loading the news.')
         return render_template('mentorship.html', user=current_user, articles=[])
 
-@app.route("/pay", methods=['GET', 'POST'])
+@app.route('/pay', methods=['GET', 'POST'])
 @login_required
 def pay():
     print("Loading pay page")
@@ -182,134 +249,40 @@ def pay():
         data = {
             "price_amount": amount,
             "price_currency": "usd",
-            "ipn_callback_url": "https://67bce4921bd7.ngrok-free.app/ipn",
-            "order_id": f"{current_user.id}:{package}",  # Include package in order_id
-            "order_description": f"{package.capitalize()} Membership for {current_user.username}"
+            "pay_currency": "usdt_trc20",
+            "ipn_callback_url": "https://yourdomain.com/ipn",
+            "order_id": current_user.id,
+            "order_description": f"Payment for {package} package by {current_user.email}"
         }
-        response = requests.post(url, json=data, headers=headers)
-        if response.status_code == 200:
-            payment_data = response.json()
-            print(f"Payment created: {payment_data}")
-            return render_template('pay.html', payment_url=payment_data.get('invoice_url'))
-        else:
-            flash('Error creating payment. Please try again.')
-            print(f"Payment error: {response.text}")
-            return redirect(url_for('dashboard'))
-    return render_template('pay_select.html', user=current_user, default_amount=default_amount, package=package)
-
-@app.route("/ipn", methods=['POST'])
-def ipn():
-    print("Received IPN callback")
-    ipn_secret = os.getenv('NOWPAYMENTS_IPN_SECRET')
-    signature = request.headers.get('x-nowpayments-sig')
-    data = request.get_json()
-    if not ipn_secret or not signature:
-        print("Invalid IPN request: missing secret or signature")
-        return "", 400
-    computed_signature = hmac.new(ipn_secret.encode(), request.data, hashlib.sha256).hexdigest()
-    if not hmac.compare_digest(computed_signature, signature):
-        print("IPN signature mismatch")
-        return "", 400
-    payment_status = data.get('payment_status')
-    order_id = data.get('order_id')
-    if payment_status == 'finished' and order_id:
-        user_id, package = order_id.split(':')
-        user = User.query.get(int(user_id))
-        if user and not user.paid:
-            user.paid = True
-            user.package = package  # Save package type
-            db.session.commit()
-            print(f"User {user.username} marked as paid with package {package}")
-    return "", 200
-
-@app.route("/update_progress", methods=['POST'])
-@login_required
-def update_progress():
-    lesson = request.form.get('lesson')
-    if lesson:
         try:
-            progress = ast.literal_eval(current_user.progress) if current_user.progress else []
-        except Exception:
-            progress = []
-        if lesson not in progress:
-            progress.append(lesson)
-            current_user.progress = str(progress)
-            db.session.commit()
-    return redirect(url_for('course'))
+            response = requests.post(url, json=data, headers=headers)
+            response.raise_for_status()
+            payment_url = response.json().get('payment_url')
+            if payment_url:
+                print(f"Redirecting to payment URL: {payment_url}")
+                return redirect(payment_url)
+            else:
+                flash('Failed to initiate payment. Try again later.')
+        except Exception as e:
+            print(f"Payment API error: {str(e)}")
+            flash('Payment service unavailable. Please try again later.')
+    try:
+        return render_template('pay.html', package=package, amount=default_amount, user=current_user)
+    except Exception as e:
+        print(f"Error loading pay.html: {str(e)}")
+        abort(500)
 
-@app.route("/logout")
+@app.route('/logout')
 @login_required
 def logout():
+    print(f"User {current_user.username} logging out")
     logout_user()
-    return redirect(url_for('login'))
-
-@app.route("/dashboard")
-@login_required
-def dashboard():
-    return render_template('dashboard.html', user=current_user)
-
-@app.route("/discord")
-@login_required
-def discord():
-    return redirect("https://discord.gg/vXmcKXkRYP")
-
-@app.route('/video')
-@login_required
-def video():
-    print("Redirecting from /video to /course")
-    return redirect(url_for('course'))  # Redirect to /course
-
-@app.route('/competition')
-@login_required
-def competition():
-    print("Loading competition page")
-    try:
-        return render_template('competition.html', user=current_user)
-    except Exception as e:
-        print(f"Error loading competition.html: {str(e)}")
-        abort(404)
-
-@app.route('/profile', methods=['GET', 'POST'])
-@login_required
-def profile():
-    if request.method == 'POST':
-        # Get form data
-        name = request.form.get('name')
-        phone = request.form.get('phone')
-        
-        # Validate phone number (server-side)
-        if not phone or not phone.isdigit() or len(phone) < 10 or len(phone) > 15:
-            flash('Please enter a valid phone number (10-15 digits)', 'error')
-            return redirect(url_for('profile'))
-        
-        # Update user data
-        current_user.name = name
-        current_user.phone = phone
-        
-        try:
-            db.session.commit()
-            flash('Profile updated successfully!', 'success')
-        except Exception as e:
-            db.session.rollback()
-            flash('An error occurred while updating your profile.', 'error')
-        
-        return redirect(url_for('profile'))
-    
-    return render_template('profile.html')
-
-@app.route('/settings')
-@login_required
-def settings():
-    print("Loading settings page")
-    try:
-        return render_template('settings.html', user=current_user)
-    except Exception as e:
-        print(f"Error loading settings.html: {str(e)}")
-        abort(404)
+    return redirect(url_for('landing'))
 
 with app.app_context():
-    print("Creating database tables...")
     db.create_all()
+    print("Database tables created!")
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5001, host='0.0.0.0')
+if __name__ == '__main__':
+    print("Starting Flask app on port 5000")
+    app.run(host='0.0.0.0', port=5000, debug=True)

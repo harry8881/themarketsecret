@@ -7,9 +7,9 @@
   <style>
     body {
       margin: 0;
-      background: #1e2225;
+      background: #f4f4f4;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: white;
+      color: #333;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -19,7 +19,7 @@
       background: #1e2225;
       padding: 1rem 2rem;
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
       position: fixed;
       top: 0;
@@ -29,135 +29,165 @@
     }
 
     .logo {
-      height: 40px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: red;
     }
 
-    .navigation {
-      width: 200px;
-      background: #1e2225;
-      padding: 1rem 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: fixed;
-      top: 80px;
-      height: calc(100vh - 80px);
-      z-index: 10;
-      justify-content: space-between;
+    .menu-toggle {
+      font-size: 2rem;
+      cursor: pointer;
+      color: #000000;
+      transition: color 0.3s ease;
+      padding: 0.5rem;
+      margin-left: 30px; !important;
+      position: relative;
+      display: inline-block;
     }
 
-    .nav-buttons {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
+    .menu-toggle:hover {
+      color: #ff4500;
     }
 
-    .navigation .btn {
+    .menu-dropdown {
+      display: none;
+      position: absolute;
+      top: 70px;
+      right: 2rem;
+      background: #000000;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      z-index: 30;
+    }
+
+    .menu-dropdown.active {
+      display: block;
+    }
+
+    .menu-dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
       color: white;
       text-decoration: none;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      padding: 1rem;
-      justify-content: flex-start;
-      transition: all 0.3s ease;
-      overflow: hidden;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
     }
 
-    .navigation .btn span.text {
-      margin-left: 1rem;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      color: white;
-    }
-
-    .navigation .btn:hover {
+    .menu-dropdown a:hover {
       background-color: rgba(255, 68, 68, 0.3);
-      transform: translateX(5px);
     }
 
-    .navigation .btn:hover span.text {
-      opacity: 1;
+    .profile-section {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 2rem;
+      width: 300px;
+      background: #2a2d32;
+      padding: 1rem;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      z-index: 30;
+    }
+
+    .profile-section.active {
+      display: block;
+    }
+
+    .profile-section h3 {
+      margin: 0 0 1rem 0;
+      color: #ff4500;
+    }
+
+    .profile-section p {
+      margin: 0.5rem 0;
+      color: #ccc;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #ccc;
+    }
+
+    .close-btn:hover {
+      color: #ff4500;
     }
 
     .content {
-      margin-left: 200px;
-      margin-top: 120px;
+      margin-top: 80px;
       padding: 2rem;
       flex-grow: 1;
       text-align: center;
     }
 
+    .subhead {
+      font-size: 1rem;
+      color: #000;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      text-align: left;
+      position: sticky;
+      top: 80px;
+      background: #f4f4f4;
+      padding-left: 2rem;
+      z-index: 10;
+    }
+
     .course-box {
-      background-color: #2a2d32;
       padding: 1.5rem;
       border-radius: 10px;
-      margin: 1rem;
-      max-width: 400px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .course-box.smc {
-      animation: float-up 3s ease-in-out infinite;
-      transform: translateX(-10px); /* Move SMC Package left */
-    }
-
-    .course-box.wave {
-      animation: float-down 3s ease-in-out infinite;
-      border: 2px solid #ffd700; /* Highlight premium package */
-    }
-
-    @keyframes float-up {
-      0% {
-        transform: translateX(-10px) translateY(0);
-      }
-      50% {
-        transform: translateX(-10px) translateY(-20px);
-      }
-      100% {
-        transform: translateX(-10px) translateY(0);
-      }
-    }
-
-    @keyframes float-down {
-      0% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(20px);
-      }
-      100% {
-        transform: translateY(0);
-      }
+      margin-bottom: 2rem;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      position: relative;
+      background: #fff;
     }
 
     .course-box h2 {
-      color: #ff4500;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
     }
 
     .package-list li {
       text-align: left;
       margin: 0.5rem 0;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
-    .package-list .premium-feature {
+    .blue-frame {
+      border: 2px solid #1E90FF;
+    }
+
+    .premium-frame {
+      border: 2px solid #2ecc71;
+      position: relative;
+    }
+
+    .premium-frame::after {
+      content: "Premium";
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: #2ecc71;
+      color: #fff;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
       font-weight: bold;
-      color: #ffd700; /* Highlight premium-exclusive features */
     }
 
     .packages {
       display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 4rem;
-      max-width: 1400px;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 700px;
       margin: auto;
-      flex-wrap: wrap;
     }
 
     .package-list {
@@ -168,138 +198,121 @@
     .package-price {
       margin-top: 1rem;
       font-weight: bold;
-      color: #ffd700;
+      color: #e74c3c;
       font-size: 1.2rem;
     }
 
     .price-button {
       display: inline-block;
-      margin-top: 0.5rem;
+      margin-top: 1rem;
       padding: 0.75rem 1.5rem;
-      background-color: #ff4500;
-      color: white;
+      background-color: #3498db;
+      color: #fff;
       text-decoration: none;
       border-radius: 5px;
-      font-size: 1.1rem;
+      font-weight: bold;
       transition: background-color 0.3s ease;
     }
 
     .price-button:hover {
-      background-color: #ff6500;
+      background-color: #2980b9;
     }
 
     .price-button-wrapper {
       text-align: center;
+      margin-top: 0;
       margin-bottom: 2rem;
     }
-
-    @media (max-width: 768px) {
-      .content {
-        margin-left: 0;
-        margin-top: 100px;
-        padding: 1rem;
-      }
-
-      .navigation {
-        width: 100%;
-        height: auto;
-        top: 60px;
-        flex-direction: row;
-        justify-content: center;
-        padding: 0.5rem 0;
-      }
-
-      .nav-buttons {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .navigation .btn {
-        padding: 0.5rem;
-        font-size: 1rem;
-      }
-
-      .navigation .btn span.text {
-        display: none;
-      }
-
-      .course-box {
-        max-width: 100%;
-      }
-
-      .course-box.smc {
-        transform: translateX(0); /* Remove left shift on mobile */
-      }
-
-      @keyframes float-up {
-        0% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-20px);
-        }
-        100% {
-          transform: translateY(0);
-        }
-      }
-    }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const menuDropdown = document.querySelector('.menu-dropdown');
+      const closeBtn = document.querySelector('.close-btn');
+      const profileLink = document.querySelector('.menu-dropdown a[href*="profile"]');
+      const profileSection = document.querySelector('.profile-section');
+
+      if (!menuToggle || !menuDropdown) {
+        console.log('Menu toggle or dropdown not found. Check HTML structure.');
+        return;
+      }
+
+      menuToggle.addEventListener('click', () => {
+        menuDropdown.classList.toggle('active');
+        console.log('Menu toggled');
+      });
+
+      closeBtn.addEventListener('click', () => {
+        profileSection.classList.remove('active');
+        menuDropdown.classList.remove('active');
+        console.log('Menu and profile closed');
+      });
+
+      profileLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        profileSection.classList.add('active');
+        menuDropdown.classList.remove('active');
+        console.log('Profile opened');
+      });
+    });
+  </script>
 </head>
 <body>
   <div class="header">
-    <span style="color: red; font-size: 1.5rem; font-weight: bold;">The Market Secret</span>
-  </div>
-
-  <div class="navigation">
-    <div class="nav-buttons">
-      <a href="{{ url_for('video') }}" class="btn">▶️ <span class="text">Video Course</span></a>
-      <a href="{{ url_for('mentorship') }}" class="btn">📰 <span class="text">Market News</span></a>
-      <a href="{{ url_for('competition') }}" class="btn">🏆 <span class="text">Competition</span></a>
-      <a href="{{ url_for('profile') }}" class="btn">👤 <span class="text">Profile</span></a>
-      <a href="{{ url_for('settings') }}" class="btn">⚙️ <span class="text">Settings</span></a>
-      <a href="{{ url_for('logout') }}" class="btn">↩️ <span class="text">Logout</span></a>
+    <div class="logo">The Market Secret</div>
+    <div class="menu-toggle">⌨️</div>
+    <div class="menu-dropdown">
+      <a href="{{ url_for('video') }}">🎥 Video Course</a>
+      <a href="{{ url_for('contact') }}">✉️ Contact</a>
+      <a href="{{ url_for('profile') }}">👤 Profile</a>
+      <a href="{{ url_for('settings') }}">⚙️ Settings</a>
+      <a href="{{ url_for('logout') }}">🚪 Logout</a>
     </div>
   </div>
 
   <div class="content">
+    <div class="subhead">Available Packages</div>
     <div class="packages">
-      <div>
-        <div class="course-box smc">
-          <h2>SMC Package</h2>
-          <ul class="package-list">
-            <li>✅ SMC Basic</li>
-            <li>✅ SMC Advanced</li>
-            <li>✅ SMC Trade Plan</li>
-            <li>✅ Video Course</li>
-            <li>❌ Zoom</li>
-            <li>✅ Discord Community</li>
-          </ul>
-          <div class="package-price">Fees - $119 💰</div>
-        </div>
-        <div class="price-button-wrapper">
-          <a href="{{ url_for('pay', package='smc') }}" class="price-button">Buy SMC Package</a>
-        </div>
+      <div class="course-box blue-frame">
+        <h2>SMC Package</h2>
+        <ul class="package-list">
+          <li>✅ SMC Basic</li>
+          <li>✅ SMC Advanced</li>
+          <li>✅ SMC Trade Plan</li>
+          <li>✅ Video Course</li>
+          <li>❌ Zoom</li>
+          <li>✅ Discord Community</li>
+        </ul>
+        <div class="package-price">Fees - 120$ 💰</div>
+      </div>
+      <div class="price-button-wrapper">
+        <a href="#" class="price-button">Buy SMC Package</a>
       </div>
 
-      <div>
-        <div class="course-box wave">
-          <h2>Wave + SMC Package ⭐</h2>
-          <ul class="package-list">
-            <li>✅ Elliott Wave Basic + SMC</li>
-            <li>✅ Elliott Wave Advanced + SMC</li>
-            <li>✅ Elliott Wave Trade Plan + SMC</li>
-            <li>✅ Video Course</li>
-            <li class="premium-feature">✅ Zoom</li>
-            <li>✅ Discord Community</li>
-            <li class="premium-feature">✅ Lifetime Membership</li>
-          </ul>
-          <div class="package-price">Fees - $250 💰</div>
-        </div>
-        <div class="price-button-wrapper">
-          <a href="{{ url_for('pay', package='wave_smc') }}" class="price-button">Buy Wave + SMC Package</a>
-        </div>
+      <div class="course-box premium-frame">
+        <h2>Wave + SMC Package</h2>
+        <ul class="package-list">
+          <li>✅ Elliott Wave Basic + SMC</li>
+          <li>✅ Elliott Wave Advanced + SMC</li>
+          <li>✅ Elliott Wave Trade Plan + SMC</li>
+          <li>✅ Video Course</li>
+          <li>✅ Zoom</li>
+          <li>✅ Discord Community</li>
+          <li>✅ Lifetime Membership</li>
+        </ul>
+        <div class="package-price">Fees - 250$ 💰</div>
       </div>
+      <div class="price-button-wrapper">
+        <a href="#" class="price-button">Buy Wave + SMC Package</a>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <span class="close-btn">❌</span>
+      <h3>Trader Profile</h3>
+      <p><strong>Username:</strong> {{ user.username }}</p>
+      <p><strong>Account Balance:</strong> $10,000</p>
+      <p><strong>Trades This Month:</strong> 15</p>
     </div>
   </div>
 </body>

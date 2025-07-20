@@ -1,7 +1,6 @@
 /* Global background solid color */
 body.gradient {
-    /* Replace gradient with solid color #1e2225 */
-    background: #1e2225; /* Changed from gradient */
+    background: #1e2225;
     color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -15,13 +14,15 @@ body.gradient {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #1e2225; /* Changed from #111 */
+    background-color: #1e2225;
     color: white;
     display: flex;
-    justify-content: space-between; /* Left logo, right buttons */
+    justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 1rem 5rem; /* Increased right padding */
     z-index: 1000;
+    box-sizing: border-box;
+    overflow: visible; /* Ensure content isn’t clipped */
 }
 
 .logo {
@@ -33,18 +34,54 @@ body.gradient {
 .menu {
     display: flex;
     gap: 1rem;
+    padding-right: 40px; /* Extra space for menu-toggle */
+    align-items: center;
+    flex-shrink: 0; /* Prevent menu from shrinking */
+}
+
+/* Menu toggle button */
+.menu-toggle {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #000000;
+    transition: color 0.3s ease;
+    padding: 0.5rem;
+    margin-right: 50px !important; /* Pull far left from right edge */
+    position: relative !important;
+    display: inline-block !important;
+    transform: translateX(-30px) !important; /* Force move left */
+    flex-shrink: 0 !important; /* Prevent shrinking */
+}
+
+.menu-toggle:hover {
+    color: #ff4500;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 2rem;
+    background: #000000;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 30;
+}
+
+.menu-dropdown.active {
+    display: block;
 }
 
 /* Center box (Login/Register Box) */
 .center-box {
     text-align: left;
-    background-color: rgba(30, 34, 37, 0.8); /* Changed from rgba(0,0,0,0.6) to match #1e2225 with opacity */
+    background-color: rgba(30, 34, 37, 0.8);
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 0 12px rgba(30, 34, 37, 0.9); /* Shadow color adjusted */
+    box-shadow: 0 0 12px rgba(30, 34, 37, 0.9);
     width: 90%;
     max-width: 400px;
-    margin: 120px auto; /* adds spacing below fixed navbar */
+    margin: 120px auto;
 }
 
 /* Headings inside center-box */
@@ -54,6 +91,7 @@ h1, h2 {
     text-align: center;
 }
 
+/* Caption text */
 .caption {
     font-size: 14px;
     color: #ffcccc;
@@ -136,6 +174,12 @@ a.button:hover, input[type="submit"]:hover, .btn-submit:hover {
         flex-direction: column;
         width: 100%;
         gap: 0.5rem;
+        padding-right: 0;
+    }
+    .menu-toggle {
+        margin-right: 0 !important;
+        margin-left: 20px !important; /* Adjusted for mobile */
+        transform: none !important; /* Reset transform */
     }
     .center-box {
         margin-top: 140px;
